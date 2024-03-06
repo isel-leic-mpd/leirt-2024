@@ -1,0 +1,49 @@
+@startuml
+'skinparam style strictuml
+skinparam classAttributeIconSize 0
+
+class Store {
+   +addCatalog(prod) : Store
+}
+enum Category {
+    AUDIO,
+    VIDEO,
+    INFORMATICS,
+    COMMUNICATIONS
+}
+
+interface Electronics {
+  +execute(data)
+  +getName()
+  +getPrice()
+  +getCategory()
+  +getBrand()
+}
+
+abstract class BaseElectronics {
+    +execute(data)
+    +getName()
+    +getPrice()
+    +getBrand()
+    +toString()
+}
+
+class TV {
+  TV(name,brand,price,res,size)
+  +getScreenSize()
+  +getResolution()
+}
+
+class Speaker {
+  Speaker(name,brand,price,power)
+  +getPower()
+}
+
+
+Electronics <|... BaseElectronics
+BaseElectronics <|-- TV
+BaseElectronics <|-- Speaker
+
+Store o-> "*" Electronics: prods
+
+@enduml
