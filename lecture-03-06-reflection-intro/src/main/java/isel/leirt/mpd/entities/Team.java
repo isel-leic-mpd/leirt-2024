@@ -3,10 +3,11 @@ package isel.leirt.mpd.entities;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Team {
+public class Team  implements Serializable {
     public  enum Position {
         GoalKeeper, CenterBack, WingBack, MidFielder, Forward
     }
@@ -14,15 +15,10 @@ public class Team {
     private String name;
     private Player[] players;
     
+    
     public Team(String name, List<Player> players) {
         this.name = name;
         this.players  = players.toArray(sz -> new Player[sz]);
-    }
-    
-    @Override
-    public String toString() {
-        // TO IMPLEMENT
-         return null;
     }
     
     public JSONObject toJson() {
@@ -50,5 +46,30 @@ public class Team {
     
     public static Team fromJsonText(String jsonText)   {
         return fromJson(new JSONObject(jsonText));
+    }
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder("name: " + name);
+        sb.append(System.lineSeparator());
+        sb.append("players:");
+        sb.append(System.lineSeparator());
+        for (int i=0; i < players.length; ++i) {
+            sb.append("  ");
+            sb.append(players[i]);
+            sb.append(System.lineSeparator());
+        }
+        return sb.toString();
+    }
+    
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null || obj.getClass() != Team.class) return false;
+        Team otherTeam = (Team) obj;
+        if (!otherTeam.name.equals(name)) return false;
+        if (players.length != otherTeam.players.length) return false;
+        for(int i=0; i < players.length; ++i) {
+            if (!players[i].equals(otherTeam.players[i]) ) return false;
+        }
+        return true;
     }
 }

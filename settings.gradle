@@ -14,4 +14,5 @@ rootProject.name = 'leirt-2024'
 include 'lecture-02-28-iterables-and-patterns'
 include 'lecture-03-06-reflection-intro'
 include 'lecture-03-13-reflection-intro'
+include 'lecture-03-20-21-more-serialization'
 
