@@ -4,6 +4,7 @@ import isel.leirt.mpd.serialization.annotations.Transient;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.AccessFlag;
+import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -38,7 +39,7 @@ public class ReflexUtils {
         
         return hasCharacteristics(f, AccessFlag.STATIC);
     }
-    
+   
     public static <T> T createInstance(Class<T> objClass) {
         try {
             var ctor = objClass.getConstructor();
@@ -50,6 +51,10 @@ public class ReflexUtils {
         catch(InstantiationException | IllegalAccessException | InvocationTargetException e) {
             throw new RuntimeException( "error invoking constructor for class " + objClass.getName(), e);
         }
+    }
+    
+    public static Object createArray(Class<?> objClass, int len) {
+        return Array.newInstance(objClass, len);
     }
     
     public static Class<?> classByName(String className) {

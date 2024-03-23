@@ -14,7 +14,7 @@ public class Date {
     }
     @Override
     public boolean equals(Object o) {
-        if (o.getClass() != getClass()) return false;
+        if (o == null || o.getClass() != getClass()) return false;
         Date other = (Date) o;
         return day == other.day && month == other.month && year == other.year;
     }

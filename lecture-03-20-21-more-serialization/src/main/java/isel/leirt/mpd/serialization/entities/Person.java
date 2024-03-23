@@ -4,6 +4,8 @@ import isel.leirt.mpd.serialization.annotations.Transient;
 
 import java.time.LocalDate;
 
+
+
 public abstract class Person {
     // category names
     private static final String Boss = "Boss";
@@ -12,6 +14,8 @@ public abstract class Person {
     
     private String name;
     private Date birthday;
+    
+    @Transient
     private int age;
     
     private static int calcAge(Date birthday) {
@@ -30,7 +34,7 @@ public abstract class Person {
     
     @Override
     public boolean equals(Object o) {
-        if (o.getClass() != getClass()) return false;
+        if (o == null || o.getClass() != getClass()) return false;
         Person other = (Person) o;
         return name.equals(other.name) && birthday.equals(other.birthday);
     }
