@@ -56,7 +56,6 @@ public class TextSerializer {
         }
     }
     
-    
     private static void loadField(Field f,  Object obj, BufferedReader reader) {
         try {
             f.setAccessible(true);
@@ -101,13 +100,13 @@ public class TextSerializer {
     public static Object loadArray(Field f, BufferedReader reader) {
         var clsName = getClassName(reader);
         var objClass = classByName(clsName);
-        var componentType = objClass.componentType();
         if (objClass != f.getType()) {
             throw new SerializerException("Inconsistent array type!");
         }
-        
+     
         // read array size
         int len = getInt(reader);
+        var componentType = objClass.componentType();
         Object objArray = createArray(componentType, len);
         
         for(int i=0; i < len; ++i) {
@@ -152,9 +151,6 @@ public class TextSerializer {
     
     private static void saveField(int level, Field f, Object obj, PrintWriter writer) {
         try {
-            if (f.isAnnotationPresent(Transient.class)) {
-                return;
-            }
             f.setAccessible(true);
             var fValue = f.get(obj);
             var fClass = f.getType();
@@ -180,7 +176,7 @@ public class TextSerializer {
         indentLine(level, writer, "%s: %s", TypeInfo, cls.getName());
         List<Field> fields = getAllFields(cls);
         for(var f : fields) {
-            if (isStatic(f)) continue;
+            if (isStatic(f) || f.isAnnotationPresent(Transient.class)) continue;
             saveField(level, f, obj, writer);
         }
     }
