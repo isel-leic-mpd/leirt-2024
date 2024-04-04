@@ -70,7 +70,7 @@ public class WeatherTests {
         int SAMPLES_PER_DAY = 8;
         
         OpenWeatherWebApi webApi = new OpenWeatherWebApi();
-        List<LocationDto> locs = webApi.search("Lisbon");
+        List<LocationDto> locs = webApi.search("Portimao");
         assertTrue(locs.size() > 0);
        
         LocationDto loc = null;
