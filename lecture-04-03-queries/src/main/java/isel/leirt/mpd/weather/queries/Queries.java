@@ -82,7 +82,7 @@ public class Queries {
     // a generic filter using our predicate interface
     // we could just replace it with java predicate
     public static <T> Iterable<T> filter(Iterable<T> src,
-           MyPredicate<T> pred) {
+           Predicate<T> pred) {
         var result = new ArrayList<T>();
         for (var f : src) {
             if (pred.test(f))
