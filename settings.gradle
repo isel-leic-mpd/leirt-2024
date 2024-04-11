@@ -17,5 +17,5 @@ include 'lecture-03-13-reflection-intro'
 include 'lecture-03-20-21-more-serialization'
 include 'lecture-03-27-queries'
 include 'lecture-04-03-queries'
-include 'lecture-04-10-chain-and-lazy-queries'
+include 'lecture-04-10-11-chain-and-lazy-queries'
 

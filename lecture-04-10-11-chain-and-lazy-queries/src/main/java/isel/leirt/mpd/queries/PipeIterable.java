@@ -1,11 +1,8 @@
 package isel.leirt.mpd.queries;
 
-import isel.leirt.mpd.queries.iterators.FilterIterator;
-import isel.leirt.mpd.queries.iterators.GeneratorIterator;
-import isel.leirt.mpd.queries.iterators.MapIterator;
-import isel.leirt.mpd.queries.iterators.RangeIterator;
-import java.util.Arrays;
-import java.util.Iterator;
+import isel.leirt.mpd.queries.iterators.*;
+
+import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -76,6 +73,65 @@ public interface PipeIterable<T> extends Iterable<T> {
     
     default PipeIterable<T> filter(Predicate<T> pred) {
         return () -> new FilterIterator<>(this, pred);
+    }
+    
+    default <U> PipeIterable<U> flatMap(Function<T, Iterable<U>> mapper) {
+     
+        return () -> new FlatmapIterator(this, mapper);
+    }
+    
+    default PipeIterable<T> takeWhile(Predicate<T> pred){
+        // To Implement
+        return () -> new TakeWhileIterator(this, pred);
+    }
+    
+    default  PipeIterable<T> skip( int nr) {
+        // To Implement
+        return null;
+    }
+    
+    default PipeIterable<T> limit(int lim) {
+        // To Implement
+        return null;
+    }
+    
+    // terminal operations
+    
+    default long count() {
+        var c = 0L;
+        for(var v : this) {
+            c++;
+        }
+        return c;
+    }
+    
+    default List<T> toList() {
+        var l = new ArrayList<T>();
+        var it = iterator();
+        
+        while(it.hasNext()) {
+            l.add(it.next());
+        }
+        while(it.hasNext()) {
+            l.add(it.next());
+        }
+        
+        return l;
+    }
+    
+    default Optional<T> first() {
+        var it = iterator();
+        if (!it.hasNext()) {
+            Optional<T> o =  Optional.empty();
+            //var v = o.get();
+            return o;
+        }
+        else return Optional.ofNullable(it.next());
+    }
+    
+    default Optional<T> max(Comparator<T> cmp) {
+        // To Implement
+        return null;
     }
     
 }
