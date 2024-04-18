@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 
 import static isel.leirt.mpd.queries.PipeIterable.*;
 import static java.lang.System.out;
+import static java.util.stream.Collectors.toList;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -150,7 +151,7 @@ public class PipeIterableTests {
     }
     
     private List<Integer> chars(String s) {
-        return s.chars().boxed().collect(Collectors.toList());
+        return s.chars().boxed().collect(toList());
     }
     
     @Test
@@ -170,10 +171,9 @@ public class PipeIterableTests {
         var  names = of( "Joao", "Carlos", "Jorge", "Luis");
         
         var jNames =
-                  names
-                  .flatMap(name -> name.startsWith("J") ? List.of(name) : List.of());
-        
-        
+              names.flatMap(name ->  name.startsWith("J") ?
+                                     List.of(name) :
+                                     List.of());
         assertEquals(2, jNames.count());
         assertEquals(List.of("Joao", "Jorge"), jNames.toList());
     }
