@@ -21,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class WeatherTests {
     private final static double LISBON_LAT  =  38.7071;
     private final static double LISBON_LONG = -9.1359;
+    
     private Reader retrieve(String path) {
         try {
             URL url = new URL(path);
@@ -38,7 +39,7 @@ public class WeatherTests {
         
         Request req = wt::retrieve; //s -> retrieve(s);
         
-        OpenWeatherWebApi webApi = new OpenWeatherWebApi(s -> retrieve(s));
+        OpenWeatherWebApi webApi = new OpenWeatherWebApi(this::retrieve);
         WeatherInfoDto winfo = webApi.weatherAt(LISBON_LAT, LISBON_LONG );
         System.out.println(winfo);
     }

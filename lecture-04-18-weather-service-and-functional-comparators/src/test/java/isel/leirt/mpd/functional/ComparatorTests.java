@@ -7,11 +7,11 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDate;
 import java.util.List;
 
-import java.util.Comparator;
-import static java.util.Comparator.comparing;
+//import java.util.Comparator;
+//import static java.util.Comparator.comparing;
 
-//import isel.leirt.mpd.functional.Comparator;
-//import static isel.leirt.mpd.functional.Comparator.comparing;
+import isel.leirt.mpd.functional.Comparator;
+import static isel.leirt.mpd.functional.Comparator.comparing;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

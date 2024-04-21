@@ -1,6 +1,6 @@
-package isel.leirt.mpd.weather2.model;
+package isel.leirt.mpd.weather3.model;
 
-import isel.leirt.mpd.weather2.queries.PipeIterable;
+import isel.leirt.mpd.weather3.queries.PipeIterable;
 
 import java.time.LocalDate;
 import java.util.function.Function;
@@ -11,14 +11,17 @@ public class DayInfo {
 	private double minTempC ;
 	private String description;
 
-	private PipeIterable<WeatherInfo> temperatures;
+	private   Function<DayInfo,PipeIterable<WeatherInfo>> temperatures;
 
 	public DayInfo(LocalDate date, double maxTempC,
-				   double minTempC, String description) {
+				   double minTempC, String description,
+				   Function<DayInfo,PipeIterable<WeatherInfo>> temperatures) {
 		this.date = date;
 		this.maxTempC = maxTempC;
 		this.minTempC = minTempC;
 		this.description = description;
+		this.temperatures = temperatures;
+	
 	}
 
 	// accessors
@@ -29,7 +32,7 @@ public class DayInfo {
 
 	public PipeIterable<WeatherInfo> temperatures() {
 		// TO CHANGE
-		return temperatures;
+		return temperatures.apply(this);
 	}
 	
 	@Override

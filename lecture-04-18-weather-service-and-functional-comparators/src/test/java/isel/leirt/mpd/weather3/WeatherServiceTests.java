@@ -1,15 +1,14 @@
-package isel.leirt.mpd.weather2;
+package isel.leirt.mpd.weather3;
 
-import isel.leirt.mpd.weather2.model.DayInfo;
-import isel.leirt.mpd.weather2.model.Location;
-import isel.leirt.mpd.weather2.model.WeatherInfo;
-import isel.leirt.mpd.weather2.queries.PipeIterable;
-import isel.leirt.mpd.weather2.requests.HttpRequest;
+import isel.leirt.mpd.weather3.model.DayInfo;
+import isel.leirt.mpd.weather3.model.Location;
+import isel.leirt.mpd.weather3.model.WeatherInfo;
+import isel.leirt.mpd.weather3.queries.PipeIterable;
+import isel.leirt.mpd.weather3.requests.HttpRequest;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicMarkableReference;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -60,8 +59,7 @@ public class WeatherServiceTests {
 	public void getForecastDetailForTomorrowAtLisbonTest() {
 		var service =
 			new OpenWeatherService(new OpenWeatherWebApi(new HttpRequest()));
-		
-		
+
 		// TODO
 		List<WeatherInfo> tomorrowTemps =
 			service.search("Lisboa")
@@ -70,8 +68,6 @@ public class WeatherServiceTests {
 				   .filter(di -> di.getDate().equals(LocalDate.now().plusDays(1)))
 				   .flatMap(di -> di.temperatures())
 				   .toList();
-				   
-		
 		
 		assertEquals(8, tomorrowTemps.size());
 		tomorrowTemps.forEach(System.out::println);

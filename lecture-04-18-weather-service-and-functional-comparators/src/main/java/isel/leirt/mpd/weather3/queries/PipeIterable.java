@@ -1,10 +1,10 @@
-package isel.leirt.mpd.weather2.queries;
+package isel.leirt.mpd.weather3.queries;
 
-import isel.leirt.mpd.weather2.queries.iterators.*;
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
+import isel.leirt.mpd.weather3.queries.iterators.*;
 
 public interface PipeIterable<T> extends Iterable<T> {
     

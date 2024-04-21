@@ -1,4 +1,4 @@
-package isel.leirt.mpd.weather2.model;
+package isel.leirt.mpd.weather3.model;
 
 import java.time.LocalDateTime;
 

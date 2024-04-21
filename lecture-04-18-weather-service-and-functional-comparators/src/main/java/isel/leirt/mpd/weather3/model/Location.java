@@ -1,6 +1,6 @@
-package isel.leirt.mpd.weather2.model;
+package isel.leirt.mpd.weather3.model;
 
-import isel.leirt.mpd.weather2.queries.PipeIterable;
+import isel.leirt.mpd.weather3.queries.PipeIterable;
 
 import java.util.function.Function;
 
@@ -11,17 +11,19 @@ public class Location {
 	private double latitude;
 	private double longitude;
 
-	private PipeIterable<DayInfo> forecast;
+	private Function<Location, PipeIterable<DayInfo>> forecast;
 
 	public Location(String name,
 	                String country,
 	                double latitude,
-	                double longitude) {
+	                double longitude,
+					Function<Location, PipeIterable<DayInfo>> forecast) {
 		this.name = name;
 		this.country = country;
 
 		this.latitude = latitude;
 		this.longitude = longitude;
+		this.forecast = forecast;
 	}
 
 	// acessors
@@ -31,8 +33,7 @@ public class Location {
 	public double getLongitude()    { return longitude; }
 
 	public PipeIterable<DayInfo> forecast()  {
-		// TO CHANGE
-		return forecast;
+		return forecast.apply(this);
 	}
 
 	@Override

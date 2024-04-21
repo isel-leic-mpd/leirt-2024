@@ -1,16 +1,11 @@
-package isel.leirt.mpd.weather2;
+package isel.leirt.mpd.weather3;
 
-import isel.leirt.mpd.weather2.dto.LocationDto;
-import isel.leirt.mpd.weather2.dto.WeatherInfoForecastDto;
-import isel.leirt.mpd.weather2.model.DayInfo;
-import isel.leirt.mpd.weather2.model.Location;
-import isel.leirt.mpd.weather2.model.WeatherInfo;
-import isel.leirt.mpd.weather2.queries.PipeIterable;
-
+import isel.leirt.mpd.weather3.dto.*;
+import isel.leirt.mpd.weather3.model.*;
+import isel.leirt.mpd.weather3.queries.PipeIterable;
+import static isel.leirt.mpd.weather3.queries.PipeIterable.of;
 import java.time.LocalDate;
 import java.util.Comparator;
-
-import static isel.leirt.mpd.weather2.queries.PipeIterable.of;
 
 public class OpenWeatherService {
 	private  OpenWeatherWebApi api;
@@ -26,9 +21,8 @@ public class OpenWeatherService {
 	 * @return
 	 */
 	public PipeIterable<Location> search(String placeName) {
-			// CHANGE TO TURN LAZY
-			return of(api.search(placeName))
-			.map(this::dtoToLocation);
+			// CHANGED TO TURN LAZY
+			return () -> of(api.search(placeName)).map(this::dtoToLocation).iterator();
 	}
 
 	
@@ -36,7 +30,7 @@ public class OpenWeatherService {
 		// CHANGE TO TURN LAZY
 		return 	of(api.forecastWeatherAt(loc.getLatitude(), loc.getLongitude()))
 				.map(dto -> dtoToDayInfo(dto, loc))
-					  .distinct(Comparator.comparing(DayInfo::getDate));
+				.distinct(Comparator.comparing(DayInfo::getDate));
 	}
 
 	private PipeIterable<WeatherInfo> weatherDetail(Double lat,
@@ -56,7 +50,8 @@ public class OpenWeatherService {
 		return  new Location(dto.getName(),
 			dto.getCountry(),
 			dto.getLat(),
-			dto.getLon()
+			dto.getLon(),
+			(Location l) -> forecastAt(l)
 		);
 	}
 
@@ -77,7 +72,8 @@ public class OpenWeatherService {
 			dto.dateTime().toLocalDate(),
 			dto.maxTemp(),
 			dto.minTemp(),
-			dto.description()
+			dto.description(),
+			di -> weatherDetail(loc, di)
 		);
 	}
 }
