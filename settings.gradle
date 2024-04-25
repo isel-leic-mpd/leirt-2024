@@ -20,4 +20,5 @@ include 'lecture-04-03-queries'
 include 'lecture-04-10-11-chain-and-lazy-queries'
 include 'lecture-04-17-weather-api-request-strategy'
 include 'lecture-04-18-weather-service-and-functional-comparators'
+include 'lecture-04-24-streams-and-sequences'
 
