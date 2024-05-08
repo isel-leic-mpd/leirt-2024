@@ -1,0 +1,85 @@
+package isel.leirt.mpd.streams;
+
+import java.io.*;
+import java.util.Spliterators;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
+
+public class StreamUtils {
+    
+    private static class FileLinesSpliterator
+        extends Spliterators.AbstractSpliterator {
+        
+        private final Supplier<BufferedReader> supReader;
+        private BufferedReader reader;
+        private boolean done = false;
+        
+        public FileLinesSpliterator(Supplier<BufferedReader> supReader) {
+            super(Long.MAX_VALUE, 0);
+            this.supReader = supReader;
+        }
+        
+        private void safeClose() {
+            try {
+                if (reader != null) {
+                    reader.close();
+                    reader = null;
+                }
+            }
+            catch(IOException e) {
+            
+            }
+        }
+        
+        private boolean isDone() {
+            return done;
+        }
+        
+        private void setDone() {
+            done = true;
+            safeClose();
+        }
+        
+        private void ensureReader() {
+            if (reader == null) reader = supReader.get();
+            
+        }
+        
+        @Override
+        public boolean tryAdvance(Consumer action) {
+            try {
+                if (isDone()) return false;
+                ensureReader();
+                var line = reader.readLine();
+                if (line != null) {
+                   action.accept(line);
+                   return true;
+                }
+                
+            }
+            catch(IOException | UncheckedIOException e) {
+                return false;
+            }
+            setDone();
+            return false;
+        }
+    }
+    
+    public static Stream<String> fileLines(String fileName) {
+        Supplier<BufferedReader> supReader = () -> {
+            try {
+                return new BufferedReader(new FileReader(fileName));
+            }
+            catch (IOException e)
+            {
+                throw new UncheckedIOException(e);
+            }
+        };
+        
+        return
+            StreamSupport.stream(new FileLinesSpliterator(supReader), false);
+    }
+   
+}
