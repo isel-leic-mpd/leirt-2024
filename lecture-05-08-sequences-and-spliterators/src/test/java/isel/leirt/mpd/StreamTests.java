@@ -8,7 +8,9 @@ public class StreamTests {
     @Test
     public void fileLinesStreamTest() {
         try(var stream = StreamUtils.fileLines("input.txt")) {
-            stream.forEach(System.out::println);
+            stream
+            .limit(10)
+            .forEach(System.out::println);
         }
         
 //        var stream =
