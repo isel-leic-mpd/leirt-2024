@@ -22,4 +22,5 @@ include 'lecture-04-17-weather-api-request-strategy'
 include 'lecture-04-18-weather-service-and-functional-comparators'
 include 'lecture-04-24-streams-and-sequences'
 include 'lecture-05-08-sequences-and-spliterators'
+include 'lecture-05-15-completable-futures-intro'
 

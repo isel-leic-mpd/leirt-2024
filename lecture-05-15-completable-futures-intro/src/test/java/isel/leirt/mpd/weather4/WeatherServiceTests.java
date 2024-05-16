@@ -1,14 +1,14 @@
-package isel.leirt.mpd.weather3;
+package isel.leirt.mpd.weather4;
 
-import isel.leirt.mpd.weather3.model.DayInfo;
-import isel.leirt.mpd.weather3.model.Location;
-import isel.leirt.mpd.weather3.model.WeatherInfo;
-import isel.leirt.mpd.weather3.queries.PipeIterable;
-import isel.leirt.mpd.weather3.requests.HttpRequest;
+import isel.leirt.mpd.weather4.model.DayInfo;
+import isel.leirt.mpd.weather4.model.Location;
+import isel.leirt.mpd.weather4.model.WeatherInfo;
+import isel.leirt.mpd.weather4.requests.HttpRequest;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -23,12 +23,9 @@ public class WeatherServiceTests {
 				new OpenWeatherWebApi()
 			);
 		
-		PipeIterable<Location> locations =
+		Stream<Location> locations =
 			service.search("Lisboa");
- 
-		for(var loc : locations) {
-			System.out.println(loc);
-		}
+ 		locations.forEach(System.out::println);
 		
 	}
 	
@@ -40,12 +37,11 @@ public class WeatherServiceTests {
 				new OpenWeatherWebApi()
 			);
 		
-		PipeIterable<Location> locations =
+		Stream<Location> locations =
 			service.search("Porto");
 		
-		for(var loc : locations) {
-			System.out.println(loc);
-		}
+		locations.forEach(System.out::println);
+		
 		
 	}
 
@@ -58,7 +54,7 @@ public class WeatherServiceTests {
 				new OpenWeatherWebApi( ));
 
 		// TODO
-		PipeIterable<DayInfo> forecastWeather =
+		Stream<DayInfo> forecastWeather =
 			service.search("Lisbon")
 		   	.filter(l -> l.getCountry().equals("PT"))
 			.flatMap(l -> l.forecast());
