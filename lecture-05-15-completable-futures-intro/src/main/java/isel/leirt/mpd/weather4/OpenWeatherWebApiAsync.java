@@ -106,84 +106,84 @@ class OpenWeatherWebApiAsync {
     
     
     
-    /**
-     * Get current air pollution metrics from a local coordinates
-     * @param lat
-     * @param lon
-     * @return
-     */
-    public PollutionInfoDto airPollutionAt(double lat, double lon) {
-        var path = String.format(AIR_POLLUTION_AT_TEMPLATE, lat, lon);
-        
-        try(Reader reader = req.get(path)) {
-            PollutionInfoQueryDto pi =
-                gson.fromJson(reader, PollutionInfoQueryDto.class);
-            if (pi.list == null || pi.list.length != 1)
-                throw new WeatherApiException("response list must have one element");
-            return pi.list[0];
-        }
-        catch(IOException e) {
-            throw new UncheckedIOException(e);
-        }
-        
-    }
-    
-    /**
-     * Get WeatherInfo's forecast for a local coordinates
-     * @param lat
-     * @param lon
-     * @return
-     */
-    public List<WeatherInfoForecastDto> forecastWeatherAt(double lat, double lon) {
-        var path =  String.format(FORECAST_WEATHER_TEMPLATE, lat, lon);
-        
-        try (Reader reader = req.get(path)) {
-            ForecastInfoDto finfo =
-                gson.fromJson(reader, ForecastInfoDto.class);
-            var local = finfo.getLocal();
-            return finfo.getForecast();
-        }
-        catch(IOException e) {
-            throw new UncheckedIOException(e);
-        }
-    }
-    
-    
-    /**
-     * Get local info given the name of the local
-     * @param location
-     * @return
-     */
-    public List<LocationDto> search(String location) {
-        
-        var path =  String.format(LOCATION_SEARCH_TEMPLATE, location);
-        
-        try (Reader reader = req.get(path)) {
-            LocationDto[] search = gson.fromJson(reader, LocationDto[].class);
-            return Arrays.asList(search);
-        }
-        catch(IOException e) {
-            throw new UncheckedIOException(e);
-        }
-    }
-    
-    public List<PollutionInfoDto> pollutionHistoryAt(
-        double lati, double longi, LocalDate start, LocalDate end) {
-        
-        var path = String.format(AIR_POLLUTION_HISTORY_TEMPLATE,
-            lati, longi,
-            TimeUtils.toUnixTime(start), TimeUtils.toUnixTime(end));
-        
-        try (Reader reader = req.get(path)) {
-            PollutionInfoQueryDto winfo =
-                gson.fromJson(reader, PollutionInfoQueryDto.class);
-            return Arrays.asList(winfo.list);
-        }
-        catch(IOException e) {
-            throw new UncheckedIOException(e);
-        }
-    }
-    
+//    /**
+//     * Get current air pollution metrics from a local coordinates
+//     * @param lat
+//     * @param lon
+//     * @return
+//     */
+//    public PollutionInfoDto airPollutionAt(double lat, double lon) {
+//        var path = String.format(AIR_POLLUTION_AT_TEMPLATE, lat, lon);
+//
+//        try(Reader reader = req.get(path)) {
+//            PollutionInfoQueryDto pi =
+//                gson.fromJson(reader, PollutionInfoQueryDto.class);
+//            if (pi.list == null || pi.list.length != 1)
+//                throw new WeatherApiException("response list must have one element");
+//            return pi.list[0];
+//        }
+//        catch(IOException e) {
+//            throw new UncheckedIOException(e);
+//        }
+//
+//    }
+//
+//    /**
+//     * Get WeatherInfo's forecast for a local coordinates
+//     * @param lat
+//     * @param lon
+//     * @return
+//     */
+//    public List<WeatherInfoForecastDto> forecastWeatherAt(double lat, double lon) {
+//        var path =  String.format(FORECAST_WEATHER_TEMPLATE, lat, lon);
+//
+//        try (Reader reader = req.get(path)) {
+//            ForecastInfoDto finfo =
+//                gson.fromJson(reader, ForecastInfoDto.class);
+//            var local = finfo.getLocal();
+//            return finfo.getForecast();
+//        }
+//        catch(IOException e) {
+//            throw new UncheckedIOException(e);
+//        }
+//    }
+//
+//
+//    /**
+//     * Get local info given the name of the local
+//     * @param location
+//     * @return
+//     */
+//    public List<LocationDto> search(String location) {
+//
+//        var path =  String.format(LOCATION_SEARCH_TEMPLATE, location);
+//
+//        try (Reader reader = req.get(path)) {
+//            LocationDto[] search = gson.fromJson(reader, LocationDto[].class);
+//            return Arrays.asList(search);
+//        }
+//        catch(IOException e) {
+//            throw new UncheckedIOException(e);
+//        }
+//    }
+//
+//    public List<PollutionInfoDto> pollutionHistoryAt(
+//        double lati, double longi, LocalDate start, LocalDate end) {
+//
+//        var path = String.format(AIR_POLLUTION_HISTORY_TEMPLATE,
+//            lati, longi,
+//            TimeUtils.toUnixTime(start), TimeUtils.toUnixTime(end));
+//
+//        try (Reader reader = req.get(path)) {
+//            PollutionInfoQueryDto winfo =
+//                gson.fromJson(reader, PollutionInfoQueryDto.class);
+//            return Arrays.asList(winfo.list);
+//        }
+//        catch(IOException e) {
+//            throw new UncheckedIOException(e);
+//        }
+//    }
+//
     public OpenWeatherWebApiAsync(AsyncRequest req) {
         this.req = req;
         gson = new Gson();

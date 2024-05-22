@@ -9,6 +9,7 @@ import java.net.URL;
 public class HttpRequest implements  Request {
 
 	@Override
+	@SuppressWarnings("deprecation")
 	public Reader get(String path) {
 		try {
 			URL url = new URL(path);

@@ -11,6 +11,7 @@ import java.util.concurrent.CompletableFuture;
 public class HttpAsyncRequest implements AsyncRequest {
 
     @Override
+    @SuppressWarnings("unchecked")
     public CompletableFuture<Reader> get(String path)  {
         var client = HttpClient.newHttpClient();
         var request = HttpRequest.newBuilder()

@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.UncheckedIOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -127,6 +128,7 @@ public class ThreadsAndCompletableFutureTests {
     }
     
     @Test
+    @SuppressWarnings("unchecked")
     public void fistUseOfCompletableFutures() {
         // launch a completable future...
         CompletableFuture<Integer> f1 = CompletableFuture.supplyAsync(() -> {
@@ -151,6 +153,7 @@ public class ThreadsAndCompletableFutureTests {
     }
     
     @Test
+    @SuppressWarnings("unchecked")
     public void useOfCompletableFuturesUSingCombination() {
         // launch a completable future...
         CompletableFuture<Integer> f1 = CompletableFuture.supplyAsync(() -> {
@@ -178,27 +181,59 @@ public class ThreadsAndCompletableFutureTests {
        
     }
     
-    
+    @SuppressWarnings("unchecked")
     private CompletableFuture<List<Integer>> incAll(List<Integer> values) {
-        var futArray = values.stream()
+        CompletableFuture<Integer>[] futArray = values.stream()
                 .map( i -> inc(i))
                 .toArray(n -> new CompletableFuture[n]);
         return CompletableFuture.allOf(futArray)
                      .thenApply(__ ->
                         Arrays.stream(futArray)
-                        .map(o -> (Integer) o.join())
+                        .map(o -> o.join())
                         .toList()
                      );
         
     }
     
-//    private CompletableFuture<List<Integer>> incAll2(List<Integer> values) {
-//        var res = values.stream()
-//                      .map( i -> inc(i))
-//                      .reduce()
+    /**
+     * Running the incAll3Test, explain the different behaviours between the uncommented
+     * and the comment versions of the code below
+     * @param values
+     */
+    private void incAll3(List<Integer> values) {
+        
+        values.stream()
+                      .map( i -> inc(i))
+                      .forEach(f -> System.out.println(f.join()));
+        
+//        var l = values.stream()
+//                     .map( i -> inc(i))
+//                    .toList();
 //
-//
-//    }
+//       l.stream().forEach(f -> System.out.println(f.join()));
+    }
+    
+    @SuppressWarnings("unchecked")
+    private CompletableFuture<List<Integer>> incAll2(List<Integer> values) {
+        CompletableFuture<List<Integer>> start =
+            CompletableFuture.completedFuture(new ArrayList<>());
+            return values.stream()
+                  .map( i -> inc(i))
+                  .reduce(start,
+                    (acc, curr) ->
+                        acc.thenCombine(curr, (l, v) -> {
+                            l.addLast(v);
+                            return l;
+                        })
+                    ,
+                    (a1, a2) ->
+                        a1.thenCombine(a2, (l1, l2) -> {
+                            l1.addAll(l2);
+                            return l1;
+                        })
+              );
+          
+    }
     
     @Test
     public void sequenceOfAsyncOperationsUsingFutures() {
@@ -214,7 +249,7 @@ public class ThreadsAndCompletableFutureTests {
     }
     
     @Test
-    public void allOfTest() {
+    public void incAllTest() {
         logger.info("test start");
         var values = List.of(1,2,3,4);
         var expected = List.of(2,3,4,5);
@@ -222,5 +257,22 @@ public class ThreadsAndCompletableFutureTests {
         var futResult = incAll(values);
         assertEquals(expected, futResult.join());
         logger.info("test end");
+    }
+    
+    @Test
+    public void incAll2Test() {
+        logger.info("test start");
+        var values = List.of(1,2,3,4);
+        var expected = List.of(2,3,4,5);
+        
+        var futResult = incAll2(values);
+        assertEquals(expected, futResult.join());
+        logger.info("test end");
+    }
+    
+    @Test
+    public void incAll3Test() {
+        var values = List.of(1,2,3,4);
+        incAll3(values);
     }
 }
