@@ -44,15 +44,15 @@ public class MoreCompletableFuturesTests {
             .map( i -> oper2Async(i))
             .toArray(n -> new CompletableFuture[n]);
         
-       return CompletableFuture.allOf(futs)
+        return CompletableFuture.allOf(futs)
                                .thenApply( __ -> {
 //            return Arrays.stream(futs)
 //            .mapToInt(f -> f.join())
 //            .sum();
            
-           return Arrays.stream(futs)
-                      .map(f -> f.join())
-                      .reduce(0, (acc, n) -> acc + n);
+        return Arrays.stream(futs)
+              .map(f -> f.join())
+              .reduce(0, (acc, n) -> acc + n);
         });
         
     }
@@ -66,23 +66,23 @@ public class MoreCompletableFuturesTests {
     }
     
     
-    // changed to reciving an iterator of the list since
-    // the get operation on a list can have a cost proportional to lis tsize
+    // changed to receive an iterator of the list since
+    // the get operation on a list can have a cost proportional to his size,
     // and so this use could have a quadratic cost
     private CompletableFuture<Integer>
-            accumulateAuxAsync(Iterator<Integer> iter,  int acc) {
+    accumulateOper1AuxAsync(Iterator<Integer> iter, int acc) {
         if (!iter.hasNext()) {
             return CompletableFuture.completedFuture(acc);
         }
         var n = iter.next();
         return oper1Async(acc, n)
                .thenCompose(acc1 -> {
-                   logger.info("before  accumulateAuxAsync");
-                   var res = accumulateAuxAsync(iter, acc1);
-                   logger.info("after  accumulateAuxAsync");
-                   return res.whenComplete((res1, err) -> {
-                       logger.info("completion of n {} with accumulation {}", n, res1);
-                   });
+                   logger.info("before  accumulateOper1AuxAsync");
+                   var res = accumulateOper1AuxAsync(iter, acc1);
+                   logger.info("after  accumulateOper1AuxAsync");
+                   return res.whenComplete((res1, err) ->
+                       logger.info("completion of n {} with accumulation {}", n, res1)
+                   );
                });
     }
     
@@ -91,7 +91,7 @@ public class MoreCompletableFuturesTests {
 //                    .thenCompose( acc -> oper1Async(acc, values.get(2)));
         
         logger.info("start accumulateOper1Async");
-          var fut = accumulateAuxAsync(values.iterator(),  0);
+          var fut = accumulateOper1AuxAsync(values.iterator(),  0);
         logger.info("end accumulateOper1Async");
         return fut;
     }
