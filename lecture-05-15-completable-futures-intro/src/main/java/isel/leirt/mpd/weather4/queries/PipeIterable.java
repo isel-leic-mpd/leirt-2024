@@ -29,8 +29,8 @@ public interface PipeIterable<T> extends Iterable<T> {
     
     @SuppressWarnings("unchecked")
     static <T> PipeIterable<T> of(T... elems) {
-        // esta é uma versão não lazy
-        // construa uma versão lazy equivalente
+        // esta é uma versão não lazy.
+        // Construa uma versão lazy equivalente
         // return of(Arrays.asList(elems));
         // return () -> of(Arrays.asList(elems)).iterator()
         return () -> new Iterator<T>() {
